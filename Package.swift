@@ -2,70 +2,32 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-baggage-context",
+    name: "swift-distributed-tracing-baggage-core",
     products: [
         .library(
-            name: "Baggage",
+            name: "CoreBaggage",
             targets: [
-                "Baggage",
-            ]
-        ),
-        .library(
-            name: "BaggageLogging",
-            targets: [
-                "BaggageLogging",
+                "CoreBaggage",
             ]
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.3.0"),
+        // no dependencies
     ],
     targets: [
         .target(
-            name: "Baggage",
+            name: "CoreBaggage",
             dependencies: []
-        ),
-
-        .target(
-            name: "BaggageLogging",
-            dependencies: [
-                "Baggage",
-                .product(name: "Logging", package: "swift-log"),
-            ]
         ),
 
         // ==== --------------------------------------------------------------------------------------------------------
         // MARK: Tests
 
         .testTarget(
-            name: "BaggageTests",
+            name: "CoreBaggageTests",
             dependencies: [
-                "Baggage",
+                "CoreBaggage",
             ]
-        ),
-
-        .testTarget(
-            name: "BaggageLoggingTests",
-            dependencies: [
-                "Baggage",
-                "BaggageLogging",
-            ]
-        ),
-
-        // ==== --------------------------------------------------------------------------------------------------------
-        // MARK: Performance / Benchmarks
-
-        .target(
-            name: "BaggageBenchmarks",
-            dependencies: [
-                "Baggage",
-                "BaggageLogging",
-                "BaggageBenchmarkTools",
-            ]
-        ),
-        .target(
-            name: "BaggageBenchmarkTools",
-            dependencies: []
         ),
     ]
 )
