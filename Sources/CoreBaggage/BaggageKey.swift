@@ -53,16 +53,36 @@ public protocol BaggageKey {
     ///
     /// Defaults to `nil`.
     static var nameOverride: String? { get }
+
+    /// Configures the policy related to values stored using this key.
+    ///
+    /// This can be used to ensure that a value should never be logged automatically by a logger associated to a context.
+    ///
+    /// Summary:
+    /// - `public` - items are accessible by other modules via `baggage.forEach` and direct key lookup,
+    ///    and will be logged by the `LoggingContext` `logger.
+    /// - `publicExceptLogging` - items are accessible by other modules via `baggage.forEach` and direct key lookup,
+    ///    however will NOT be logged by the `LoggingContext` `logger.
+    /// - `private` - items are NOT accessible by other modules via `baggage.forEach` nor are they logged by default.
+    ///    The only way to gain access to a private baggage item is through it's key or accessor, which means that
+    ///    access is controlled using Swift's native access control mechanism, i.e. a `private`/`internal` `Key` and `set` accessor,
+    ///    will result in a baggage item that may only be set by the owning module, but read by anyone via the (`public`) accessor.
+    ///
+    /// Defaults to `.public`.
+    static var access: Baggage.AccessPolicy { get }
 }
 
 extension BaggageKey {
     public static var nameOverride: String? { return nil }
+    public static var access: Baggage.AccessPolicy { return .public }
 }
 
 /// A type-erased `BaggageKey` used when iterating through the `Baggage` using its `forEach` method.
 public struct AnyBaggageKey {
     /// The key's type represented erased to an `Any.Type`.
     public let keyType: Any.Type
+
+    public let access: Baggage.AccessPolicy
 
     private let _nameOverride: String?
 
@@ -75,6 +95,13 @@ public struct AnyBaggageKey {
     init<Key>(_ keyType: Key.Type) where Key: BaggageKey {
         self.keyType = keyType
         self._nameOverride = keyType.nameOverride
+        self.access = keyType.access
+    }
+}
+
+extension AnyBaggageKey: CustomStringConvertible {
+    public var description: String {
+        return "AnyBaggageKey(\(self.name), access: \(self.access))"
     }
 }
 
