@@ -185,6 +185,7 @@ extension Baggage {
         return self._storage.count
     }
 
+    /// Returns true if the baggage has no items stored.
     public var isEmpty: Bool {
         return self._storage.isEmpty
     }
@@ -193,11 +194,25 @@ extension Baggage {
     ///
     /// Order of those invocations is NOT guaranteed and should not be relied on.
     ///
+    /// ### Access Control
+    ///
+    /// By default accesses ALL `public` and `publicExceptLogging` values.
+    /// Baggage items whose keys are marked with `private` access, are never accessed by a forEach.
+    ///
     /// - Parameter body: A closure invoked with the type erased key and value stored for the key in this baggage.
-    public func forEach(_ body: (AnyBaggageKey, Any) throws -> Void) rethrows {
+    public func forEach(access: ForEachAccessType = .allPublic, _ body: (AnyBaggageKey, Any) throws -> Void) rethrows {
         try self._storage.forEach { key, value in
-            try body(key, value)
+            if key.access.rawValue <= access.rawValue {
+                try body(key, value)
+            }
         }
+    }
+
+    public enum ForEachAccessType: Int, Hashable {
+        /// Access all accessible values (i.e. `public` and `publicExceptLogging` values; `private` values are skipped)
+        case allPublic = 8
+        /// Access all accessible values for purposes of logging (i.e. ONLY `public`, skipping `publicExceptLogging` and `private` values)
+        case logging = 0
     }
 }
 

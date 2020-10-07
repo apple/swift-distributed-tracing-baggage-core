@@ -30,6 +30,8 @@ extension BaggageTests {
                 ("testEmptyBaggageDescription", testEmptyBaggageDescription),
                 ("testSingleKeyBaggageDescription", testSingleKeyBaggageDescription),
                 ("testMultiKeysBaggageDescription", testMultiKeysBaggageDescription),
+                ("test_forEach_forLogging_respects_BaggageAccessPolicy", test_forEach_forLogging_respects_BaggageAccessPolicy),
+                ("test_forEach_respects_BaggageAccessPolicy", test_forEach_respects_BaggageAccessPolicy),
                 ("test_todo_context", test_todo_context),
                 ("test_topLevel", test_topLevel),
            ]
