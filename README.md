@@ -1,27 +1,22 @@
 # 🧳 Distributed Tracing Baggage Core
 
+> 📔 **NOTE**: It is very unlikely that you want to depend on _this_ package itself. 
+> Most libraries and projects should depend on and use the https://github.com/apple/swift-distributed-tracing-baggage package instead.
+> And consider baggage an implementation detail, unless avoiding the `SwiftLog` dependency is necessary.
+
 `Baggage` is a minimal (zero-dependency) context propagation container, intended to "carry" baggage items
 for purposes of cross-cutting tools to be built on top of it.
 
 It is modeled after the concepts explained in [W3C Baggage](https://w3c.github.io/baggage/) and the 
-in the spirit of [Tracing Plane](https://cs.brown.edu/~jcmace/papers/mace18universal.pdf) baggage context type,
- although by itself it does not define a specific serialization format. 
+in the spirit of [Tracing Plane](https://cs.brown.edu/~jcmace/papers/mace18universal.pdf) 's "Baggage Context" type,
+although by itself it does not define a specific serialization format. 
  
 Please refer to [Swift Distributed Tracing Baggage](https://github.com/apple/swift-distributed-tracing-baggage) 
 and [Swift Distributed Tracing](https://github.com/apple/swift-distributed-tracing) for usage guides of this type.
 
+## Dependency
 
-## Dependencies
-
-It should be noted that most libraries and frameworks do NOT need to depend on this package explicitly,
-but rather should depend on [Swift Distributed Tracing Baggage](https://github.com/apple/swift-distributed-tracing-baggage) or [Swift Distributed Tracing](https://github.com/apple/swift-distributed-tracing) which will pull the
-`CoreBaggage` via their transitive dependencies. This package and the `CoreBaggage` module exist only for
-libraries which want to maintain an absolutely minimal dependency footprint, and e.g. do not want to depend on `Logging` modules, which the higher level packages may do.
-
-## Installation
-
-You can install the `BaggageContext` library through the Swift Package Manager. The library itself is called `Baggage`,
-so that's what you'd import in your Swift files.
+ In order to depend on this library you can use the Swift Package Manager, and add the following dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -33,7 +28,7 @@ dependencies: [
 ]
 ```
 
-and depend on the module:
+and depend on the module in your target:
 
 ```swift 
 targets: [
@@ -49,8 +44,10 @@ targets: [
 
 ## Usage
 
-Please refer to [Swift Distributed Tracing Baggage](https://github.com/apple/swift-distributed-tracing-baggage) for the intended usage.
+Please refer to [Swift Distributed Tracing Baggage](https://github.com/apple/swift-distributed-tracing-baggage) for the intended usage,
+and detailed guidelines.
 
+Alternatively, please refer to the API documentation of the Baggage type.
 
 ## Contributing
 

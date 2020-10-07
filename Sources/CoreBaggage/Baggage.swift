@@ -185,6 +185,10 @@ extension Baggage {
         return self._storage.count
     }
 
+    public var isEmpty: Bool {
+        return self._storage.isEmpty
+    }
+
     /// Calls the given closure for each item contained in the underlying `Baggage`.
     ///
     /// Order of those invocations is NOT guaranteed and should not be relied on.
