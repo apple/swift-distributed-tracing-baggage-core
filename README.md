@@ -1,8 +1,9 @@
 # 🧳 Distributed Tracing Baggage Core
 
 > 📔 **NOTE**: It is very unlikely that you want to depend on _this_ package itself. 
-> Most libraries and projects should depend on and use the https://github.com/apple/swift-distributed-tracing-baggage package instead.
-> And consider baggage an implementation detail, unless avoiding the `SwiftLog` dependency is necessary.
+>
+> Most libraries and projects should depend on and use the https://github.com/apple/swift-distributed-tracing-baggage package instead, 
+> unless avoiding the `SwiftLog` dependency is necessary.
 
 `Baggage` is a minimal (zero-dependency) context propagation container, intended to "carry" baggage items
 for purposes of cross-cutting tools to be built on top of it.
