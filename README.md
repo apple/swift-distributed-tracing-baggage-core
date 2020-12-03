@@ -24,7 +24,7 @@ dependencies: [
   .package(
     name: "swift-baggage-context-core",
     url: "https://github.com/apple/swift-distributed-tracing-baggage-core.git",
-    from: "0.3.0"
+    from: "0.1.0"
   )
 ]
 ```
