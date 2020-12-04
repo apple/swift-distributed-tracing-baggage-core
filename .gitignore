@@ -1,4 +1,5 @@
 .DS_Store
+.SourceKitten
 Package.resolved
 /.build
 /Packages
