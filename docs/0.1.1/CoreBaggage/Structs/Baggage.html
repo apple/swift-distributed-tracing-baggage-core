@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Baggage Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Struct/Baggage" class="dashAnchor"></a>
+
+    <a title="Baggage Structure Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          CoreBaggage 0.1.1 Docs
+        </a>
+         (92% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/apple/swift-distributed-tracing-baggage-core">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fapple.github.io%2Fswift-distributed-tracing-baggage-core%2Fdocs%2F0.1.1%2FCoreBaggage%2Fdocsets%2FCoreBaggage.xml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">CoreBaggage Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      Baggage Structure Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/BaggageKey.html">BaggageKey</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AnyBaggageKey.html">AnyBaggageKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Baggage.html">Baggage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/TODOLocation.html">TODOLocation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>Baggage</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Baggage</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">Baggage</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                </div>
+              </div>
+            <p>A <code>Baggage</code> is a heterogeneous storage type with value semantics for keyed values in a type-safe fashion.</p>
+
+<p>Its values are uniquely identified via <code><a href="../Structs/Baggage.html#/s:11CoreBaggage0B0V3Keya">Baggage.Key</a></code>s (by type identity). These keys also dictate the type of
+value allowed for a specific key-value pair through their associated type <code>Value</code>.</p>
+<h2 id='defining-keys-and-accessing-values' class='heading'>Defining keys and accessing values</h2>
+
+<p>Baggage keys are defined as types, most commonly case-less enums (as no actual instances are actually required)
+which conform to the <code><a href="../Structs/Baggage.html#/s:11CoreBaggage0B0V3Keya">Baggage.Key</a></code> protocol:</p>
+<pre class="highlight swift"><code><span class="kd">private</span> <span class="kd">enum</span> <span class="kt">TestIDKey</span><span class="p">:</span> <span class="kt">Baggage</span><span class="o">.</span><span class="kt">Key</span> <span class="p">{</span>
+  <span class="kd">typealias</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">String</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>While defining a key, one should also immediately declare an extension on <code>Baggage</code>,
+to allow convenient and discoverable ways to interact with the baggage item, the extension should take the form of:</p>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">Baggage</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="nv">testID</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span>
+    <span class="k">get</span> <span class="p">{</span>
+      <span class="k">self</span><span class="p">[</span><span class="kt">TestIDKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span>
+    <span class="p">}</span> <span class="k">set</span> <span class="p">{</span>
+      <span class="k">self</span><span class="p">[</span><span class="kt">TestIDKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>For consistency, it is recommended to name key types with the <code><a href="../Protocols/BaggageKey.html">...Key</a></code> suffix (e.g. <code>SomethingKey</code>) and the property
+used to access a value identifier by such key the prefix of the key (e.g. <code>something</code>). Please also observe the usual
+Swift naming conventions, e.g. prefer <code>ID</code> to <code>Id</code> etc.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+
+<p>Using a baggage container is fairly straight forward, as it boils down to using the prepared computed properties:</p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">baggage</span> <span class="o">=</span> <span class="kt">Baggage</span><span class="o">.</span><span class="n">topLevel</span>
+<span class="c1">// set a new value</span>
+<span class="n">baggage</span><span class="o">.</span><span class="n">testID</span> <span class="o">=</span> <span class="s">"abc"</span>
+<span class="c1">// retrieve a stored value</span>
+<span class="k">let</span> <span class="nv">testID</span> <span class="o">=</span> <span class="n">baggage</span><span class="o">.</span><span class="n">testID</span> <span class="p">??</span> <span class="s">"default"</span>
+<span class="c1">// remove a stored value</span>
+<span class="n">baggage</span><span class="o">.</span><span class="n">testIDKey</span> <span class="o">=</span> <span class="kc">nil</span>
+</code></pre>
+
+<p>Note that normally a baggage should not be &ldquo;created&rdquo; ad-hoc by user code, but rather it should be passed to it from
+a runtime. For example, when working in an HTTP server framework, it is most likely that the baggage is already passed
+directly or indirectly (e.g. in a <code>FrameworkContext</code>)</p>
+<h3 id='accessing-all-values' class='heading'>Accessing all values</h3>
+
+<p>The only way to access &ldquo;all&rdquo; values in a baggage context is by using the <code>forEach</code> function.
+The baggage container on purpose does not expose more functions to prevent abuse and treating it as too much of an
+arbitrary value smuggling container, but only make it convenient for tracing and instrumentation systems which need
+to access either specific or all items carried inside a baggage.</p>
+
+              <div class="slightly-smaller">
+                <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L68-L76">Show on GitHub</a>
+              </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V3Keya"></a>
+                    <a name="//apple_ref/swift/Alias/Key" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V3Keya">Key</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Key</span> <span class="o">=</span> <span class="kt"><a href="../Protocols/BaggageKey.html">BaggageKey</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Baggage"></a>
+                <a name="//apple_ref/swift/Section/Baggage" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Baggage"></a>
+                  <h3 class="section-name"><p>Baggage</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V8topLevelACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/topLevel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V8topLevelACvpZ">topLevel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new empty &ldquo;top level&rdquo; baggage, generally used as an &ldquo;initial&rdquo; baggage to immediately be populated with
+some values by a framework or runtime. Another use case is for tasks starting in the &ldquo;background&rdquo; (e.g. on a timer),
+which don&rsquo;t have a &ldquo;request context&rdquo; per se that they can pick up, and as such they have to create a &ldquo;top level&rdquo;
+baggage for their work.</p>
+<h2 id='usage-in-frameworks-and-libraries' class='heading'>Usage in frameworks and libraries</h2>
+
+<p>This function is really only intended to be used frameworks and libraries, at the &ldquo;top-level&rdquo; where a request&rsquo;s,
+message&rsquo;s or task&rsquo;s processing is initiated. For example, a framework handling requests, should create an empty
+context when handling a request only to immediately populate it with useful trace information extracted from e.g.
+request headers.</p>
+<h2 id='usage-in-applications' class='heading'>Usage in applications</h2>
+
+<p>Application code should never have to create an empty context during the processing lifetime of any request,
+and only should create contexts if some processing is performed in the background - thus the naming of this property.</p>
+
+<p>Usually, a framework such as an HTTP server or similar &ldquo;request handler&rdquo; would already provide users
+with a context to be passed along through subsequent calls.</p>
+
+<p>If unsure where to obtain a context from, prefer using <code>.TODO(&quot;Not sure where I should get a context from here?&quot;)</code>,
+in order to inform other developers that the lack of context passing was not done on purpose, but rather because either
+not being sure where to obtain a context from, or other framework limitations &ndash; e.g. the outer framework not being
+baggage context aware just yet.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">topLevel</span><span class="p">:</span> <span class="kt">Baggage</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L101-L103">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V4TODO_8function4file4lineACs12StaticStringVSg_S2SSutFZ"></a>
+                    <a name="//apple_ref/swift/Method/TODO(_:function:file:line:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V4TODO_8function4file4lineACs12StaticStringVSg_S2SSutFZ">TODO(_:<wbr>function:<wbr>file:<wbr>line:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A baggage intended as a placeholder until a real value can be passed through a function call.</p>
+
+<p>It should ONLY be used while prototyping or when the passing of the proper context is not yet possible,
+e.g. because an external library did not pass it correctly and has to be fixed before the proper context
+can be obtained where the TO-DO is currently used.</p>
+<h2 id='crashing-on-to-do-context-creation' class='heading'>Crashing on TO-DO context creation</h2>
+
+<p>You may set the <code>BAGGAGE_CRASH_TODOS</code> variable while compiling a project in order to make calls to this function crash
+with a fatal error, indicating where a to-do baggage context was used. This comes in handy when wanting to ensure that
+a project never ends up using with code initially was written as &ldquo;was lazy, did not pass context&rdquo;, yet the
+project requires context passing to be done correctly throughout the application. Similar checks can be performed
+at compile time easily using linters (not yet implemented), since it is always valid enough to detect a to-do context
+being passed as illegal and warn or error when spotted.</p>
+<h2 id='example' class='heading'>Example</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">baggage</span> <span class="o">=</span> <span class="kt">Baggage</span><span class="o">.</span><span class="kt">TODO</span><span class="p">(</span><span class="s">"The framework XYZ should be modified to pass us a context here, and we'd pass it along"</span><span class="p">))</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="kt">TODO</span><span class="p">(</span><span class="n">_</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">StaticString</span><span class="p">?</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">#function</span><span class="p">,</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">#file</span><span class="p">,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">UInt</span> <span class="o">=</span> <span class="kd">#line</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Baggage</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Informational reason for developers, why a placeholder context was used instead of a proper one,</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Empty &ldquo;to-do&rdquo; baggage context which should be eventually replaced with a carried through one, or <code>background</code>.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L128-L136">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0Vy5ValueQzSgxmcAA0B3KeyRzluip"></a>
+                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0Vy5ValueQzSgxmcAA0B3KeyRzluip">subscript(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provides type-safe access to the baggage&rsquo;s values.
+This API should ONLY be used inside of accessor implementations.</p>
+
+<p>End users rather than using this subscript should use &ldquo;accessors&rdquo; the key&rsquo;s author MUST define, following this pattern:</p>
+<pre class="highlight swift"><code><span class="kd">internal</span> <span class="kd">enum</span> <span class="kt">TestID</span><span class="p">:</span> <span class="kt">Baggage</span><span class="o">.</span><span class="kt">Key</span> <span class="p">{</span>
+    <span class="kd">typealias</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">TestID</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">Baggage</span> <span class="p">{</span>
+  <span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">testID</span><span class="p">:</span> <span class="kt">TestID</span><span class="p">?</span> <span class="p">{</span>
+    <span class="k">get</span> <span class="p">{</span>
+      <span class="k">self</span><span class="p">[</span><span class="kt">TestIDKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">set</span> <span class="p">{</span>
+      <span class="k">self</span><span class="p">[</span><span class="kt">TestIDKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>This is in order to enforce a consistent style across projects and also allow for fine grained control over
+who may set and who may get such property. Just access control to the Key type itself lacks such fidelity.</p>
+
+<p>Note that specific baggage and context types MAY (and usually do), offer also a way to set baggage values,
+however in the most general case it is not required, as some frameworks may only be able to offer reading.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">subscript</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Baggage.html#/s:11CoreBaggage0B0V3Keya">Key</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/Baggage.html#/s:11CoreBaggage0B0V3Keya">Key</a></span><span class="o">.</span><span class="k">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Baggage.html#/s:11CoreBaggage0B0V3Keya">Key</a></span><span class="o">.</span><span class="kt">Value</span><span class="p">?</span> <span class="k">where</span> <span class="kt"><a href="../Structs/Baggage.html#/s:11CoreBaggage0B0V3Keya">Key</a></span> <span class="p">:</span> <span class="kt"><a href="../Protocols/BaggageKey.html">BaggageKey</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L172-L181">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V5countSivp"></a>
+                    <a name="//apple_ref/swift/Property/count" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V5countSivp">count</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Number of contained baggage items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">count</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L184-L186">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V7isEmptySbvp"></a>
+                    <a name="//apple_ref/swift/Property/isEmpty" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V7isEmptySbvp">isEmpty</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isEmpty</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L188-L190">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V7forEachyyyAA03AnyB3KeyV_yptKXEKF"></a>
+                    <a name="//apple_ref/swift/Method/forEach(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V7forEachyyyAA03AnyB3KeyV_yptKXEKF">forEach(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Calls the given closure for each item contained in the underlying <code>Baggage</code>.</p>
+
+<p>Order of those invocations is NOT guaranteed and should not be relied on.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">forEach</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Structs/AnyBaggageKey.html">AnyBaggageKey</a></span><span class="p">,</span> <span class="kt">Any</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">rethrows</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure invoked with the type erased key and value stored for the key in this baggage.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L197-L201">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11CoreBaggage0B0V11descriptionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11CoreBaggage0B0V11descriptionSSvp">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A context&rsquo;s description prints only keys of the contained values.
+This is in order to prevent spilling a lot of detailed information of carried values accidentally.</p>
+
+<p><code>Baggage</code>s are not intended to be printed &ldquo;raw&rdquo; but rather inter-operate with tracing, logging and other systems,
+which can use the <code>forEach</code> function providing access to its underlying values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/apple/swift-distributed-tracing-baggage-core/tree/0.1.1/Sources/CoreBaggage/Baggage.swift#L210-L212">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/apple/swift-distributed-tracing-baggage-core" target="_blank" rel="external">Swift Distributed Tracing team</a>. All rights reserved. (Last updated: 2020-12-04)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

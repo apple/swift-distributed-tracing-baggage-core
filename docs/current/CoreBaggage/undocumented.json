@@ -1,0 +1,19 @@
+{
+  "warnings": [
+    {
+      "file": "/code/Sources/CoreBaggage/Baggage.swift",
+      "line": 69,
+      "symbol": "Baggage.Key",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/code/Sources/CoreBaggage/Baggage.swift",
+      "line": 188,
+      "symbol": "Baggage.isEmpty",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/code"
+}
