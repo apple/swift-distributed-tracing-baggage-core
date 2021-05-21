@@ -16,12 +16,9 @@
 import _Concurrency
 
 @available(macOS 9999, iOS 9999, watchOS 9999, tvOS 9999, *)
-extension TaskLocalValues {
-    public struct BaggageKey: TaskLocalKey {
-        public static var defaultValue: Baggage { Baggage.topLevel }
-    }
-
-    public var baggage: BaggageKey { .init() }
+extension Baggage {
+    @TaskLocal
+    public static var current: Baggage?
 }
 #endif
 #endif
