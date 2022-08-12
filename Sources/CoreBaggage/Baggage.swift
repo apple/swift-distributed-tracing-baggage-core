@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift Distributed Tracing Baggage open source project
 //
-// Copyright (c) 2020 Apple Inc. and the Swift Distributed Tracing Baggage project authors
+// Copyright (c) 2020-2022 Apple Inc. and the Swift Distributed Tracing Baggage project authors
 // Licensed under Apache License v2.0
 //
 // See LICENSE.txt for license information
@@ -16,12 +16,12 @@
 
 /// A `Baggage` is a heterogeneous storage type with value semantics for keyed values in a type-safe fashion.
 ///
-/// Its values are uniquely identified via `Baggage.Key`s (by type identity). These keys also dictate the type of
+/// Its values are uniquely identified via ``BaggageKey``s (by type identity). These keys also dictate the type of
 /// value allowed for a specific key-value pair through their associated type `Value`.
 ///
 /// ## Defining keys and accessing values
 /// Baggage keys are defined as types, most commonly case-less enums (as no actual instances are actually required)
-/// which conform to the `Baggage.Key` protocol:
+/// which conform to the ``BaggageKey`` protocol:
 ///
 ///     private enum TestIDKey: Baggage.Key {
 ///       typealias Value = String
@@ -70,7 +70,7 @@ public struct Baggage {
 
     private var _storage = [AnyBaggageKey: Any]()
 
-    /// Internal on purpose, please use `Baggage.TODO` or `Baggage.topLevel` to create an "empty" context,
+    /// Internal on purpose, please use ``Baggage/TODO(_:function:file:line:)`` or ``Baggage/topLevel`` to create an "empty" context,
     /// which carries more meaning to other developers why an empty context was used.
     init() {}
 }

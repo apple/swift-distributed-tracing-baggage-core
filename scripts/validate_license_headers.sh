@@ -3,7 +3,7 @@
 ##
 ## This source file is part of the Swift Distributed Tracing Baggage open source project
 ##
-## Copyright (c) 2020 Apple Inc. and the Swift Distributed Tracing Baggage project authors
+## Copyright (c) 2020-2022 Apple Inc. and the Swift Distributed Tracing Baggage project authors
 ## Licensed under Apache License v2.0
 ##
 ## See LICENSE.txt for license information
@@ -31,7 +31,7 @@ here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function replace_acceptable_years() {
   # this needs to replace all acceptable forms with 'YEARS'
-  sed -e 's/2019-2020/YEARS/' -e 's/2019-2021/YEARS/' -e 's/2020/YEARS/' -e 's/2021/YEARS/'
+  sed -e 's/20[12][901]-202[012]/YEARS/' -e 's/2019/YEARS/' -e 's/202[012]/YEARS/'
 }
 
 printf "=> Checking license headers\n"
